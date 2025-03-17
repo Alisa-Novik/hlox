@@ -9,47 +9,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Hello world!
- *
- */
-public class App 
+public class Lox 
 {
-    class Token {
-        final TokenType type;
-        final String lexeme;
-        final Object literal;
-        final int line;
-
-        Token(TokenType type, String lexeme, Object literal, int line) {
-            this.type = type; 
-            this.lexeme = lexeme; 
-            this.literal = literal; 
-            this.line = line; 
-        }
-
-        public String toString() {
-            return type + " " + lexeme + " " + literal;
-        }
-    }
-
-    enum TokenType {
-        // Single-character tokens.
-        LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
-        COMMA, DOT, MINUS, PLUS, SEMICOLON, SLASH, STAR,
-        // One or two character tokens.
-        BANG, BANG_EQUAL,
-        EQUAL, EQUAL_EQUAL,
-        GREATER, GREATER_EQUAL,
-        LESS, LESS_EQUAL,
-        // Literals.
-        IDENTIFIER, STRING, NUMBER,
-        // Keywords.
-        AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR,
-        PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE,
-        EOF
-    }
-
     private static boolean hadError;
 
     public static void main( String[] args ) throws IOException
@@ -94,12 +55,12 @@ public class App
         }
     }
 
-    static void error(String line, String message) {
+    static void error(int line, String message) {
         report(line, "", message);
     }
 
-    private static void report(String line, String where, String message) {
-        System.err.println(String.format("[line %s] Error %s: %s", line, where, message));
+    private static void report(int line, String where, String message) {
+        System.err.println(String.format("[line %d] Error %s: %s", line, where, message));
         hadError = true;
     }
 }
