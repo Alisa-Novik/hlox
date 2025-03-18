@@ -82,7 +82,6 @@ public class Scanner
                 } else {
                     addToken(TokenType.SLASH);
                 }
-                addToken(match('=') ? TokenType.LESS_EQUAL: TokenType.LESS);
                 break;
             case '"':
                 string();
@@ -128,7 +127,7 @@ public class Scanner
     }
 
     private boolean isDigit(char c) {
-        return c >= '0' || c <= '9';
+        return c >= '0' && c <= '9';
     }
 
     private void number() {
@@ -149,7 +148,7 @@ public class Scanner
     }
 
     private void string() {
-        while(peek() != '"' || !isAtEnd()) {
+        while(peek() != '"' && !isAtEnd()) {
             if (peek() == '\n') line++;
             advance();
         }
@@ -177,8 +176,7 @@ public class Scanner
     }
 
     private char advance() {
-        current++;
-        return source.charAt(current - 1);
+        return source.charAt(current++);
     }
 
     private void addToken(TokenType type, Object literal) {

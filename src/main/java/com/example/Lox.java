@@ -7,7 +7,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Scanner;
+
+import com.example.Token.TokenType;
 
 public class Lox 
 {
@@ -47,11 +48,23 @@ public class Lox
     }
 
     private static void run(String source) {
-        Scanner sc = new Scanner(source);
-        List<String> tokens = sc.tokens().toList();
+        Scanner scanner = new Scanner(source);
+        List<Token> tokens = scanner.scanTokens();
 
-        for (String token : tokens) {
-            System.out.println("Token: " + token);
+        System.out.println(tokens);
+        Parser parser = new Parser(tokens);
+        Expr expr = parser.parse();
+
+        if (hadError) return;
+
+        System.out.println((new AstPrinter()).print(expr));
+    }
+
+    static void error(Token token, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, " at the end", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
         }
     }
 
