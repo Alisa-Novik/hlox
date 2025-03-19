@@ -12,7 +12,10 @@ import com.example.Token.TokenType;
 
 public class Lox 
 {
-    private static boolean hadError;
+    private static Interpreter interpreter = new Interpreter();
+
+    private static boolean hadError = false;
+    private static boolean hadRuntimeError = false;
 
     public static void main( String[] args ) throws IOException
     {
@@ -45,6 +48,9 @@ public class Lox
         if (hadError) {
             System.exit(65);
         }
+        if (hadRuntimeError) {
+            System.exit(70);
+        }
     }
 
     private static void run(String source) {
@@ -57,7 +63,8 @@ public class Lox
 
         if (hadError) return;
 
-        System.out.println((new AstPrinter()).print(expr));
+        // System.out.println((new AstPrinter()).print(expr));
+        interpreter.interpret(expr);
     }
 
     static void error(Token token, String message) {
@@ -75,5 +82,10 @@ public class Lox
     private static void report(int line, String where, String message) {
         System.err.println(String.format("[line %d] Error %s: %s", line, where, message));
         hadError = true;
+    }
+
+    public static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
+        hadRuntimeError = true;
     }
 }
