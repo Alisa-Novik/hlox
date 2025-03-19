@@ -6,6 +6,7 @@ import com.example.Expr.Binary;
 import com.example.Expr.Grouping;
 import com.example.Expr.Literal;
 import com.example.Expr.Unary;
+import com.example.Expr.Variable;
 import com.example.Token.TokenType;
 
 class AstPrinter implements Expr.Visitor<String> {
@@ -46,6 +47,12 @@ class AstPrinter implements Expr.Visitor<String> {
     @Override
     public String visitUnaryExpr(Unary expr) {
         return parenthesize(expr.operator.lexeme, expr.right);
+    }
+
+    @Override
+    public String visitVariableExpr(Variable expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitVariableExpr'");
     }
 }
 
