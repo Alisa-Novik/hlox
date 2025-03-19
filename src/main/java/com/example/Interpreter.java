@@ -7,12 +7,16 @@ import com.example.Expr.Assign;
 import com.example.Expr.Binary;
 import com.example.Expr.Grouping;
 import com.example.Expr.Literal;
+import com.example.Expr.Logical;
 import com.example.Expr.Unary;
 import com.example.Expr.Variable;
 import com.example.Stmt.Block;
 import com.example.Stmt.Expression;
+import com.example.Stmt.If;
 import com.example.Stmt.Print;
 import com.example.Stmt.Var;
+import com.example.Stmt.While;
+import com.example.Token.TokenType;
 
 class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
@@ -199,6 +203,38 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         } finally {
             this.environment = prev;
         }
+    }
+
+    @Override
+    public Void visitIfStmt(If stmt) {
+        if (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.thenBranch);
+        } else if (stmt.elseBranch != null) {
+            execute(stmt.elseBranch);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object visitLogicalExpr(Logical expr) {
+        Object left = evaluate(expr.left);
+
+        if (expr.operator.type == TokenType.OR) {
+            if (isTruthy(left)) return left;
+        } else {
+            if (!isTruthy(left)) return left;
+        }
+
+        return evaluate(expr.right);
+    }
+
+    @Override
+    public Void visitWhileStmt(While stmt) {
+        while(isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.body);
+        }
+        return null;
     }
 }
 
