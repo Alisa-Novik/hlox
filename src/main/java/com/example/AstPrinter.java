@@ -2,6 +2,7 @@ package com.example;
 
 import java.io.IOException;
 
+import com.example.Expr.Assign;
 import com.example.Expr.Binary;
 import com.example.Expr.Grouping;
 import com.example.Expr.Literal;
@@ -53,6 +54,12 @@ class AstPrinter implements Expr.Visitor<String> {
     public String visitVariableExpr(Variable expr) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'visitVariableExpr'");
+    }
+
+    @Override
+    public String visitAssignExpr(Assign expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitAssignExpr'");
     }
 }
 

@@ -3,11 +3,13 @@ package com.example;
 
 import java.util.List;
 
+import com.example.Expr.Assign;
 import com.example.Expr.Binary;
 import com.example.Expr.Grouping;
 import com.example.Expr.Literal;
 import com.example.Expr.Unary;
 import com.example.Expr.Variable;
+import com.example.Stmt.Block;
 import com.example.Stmt.Expression;
 import com.example.Stmt.Print;
 import com.example.Stmt.Var;
@@ -172,6 +174,31 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitVariableExpr(Variable expr) {
         return environment.get(expr.name);
+    }
+
+    @Override
+    public Object visitAssignExpr(Assign expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, value);
+        return value;
+    }
+
+    @Override
+    public Void visitBlockStmt(Block stmt) {
+        executeBlock(stmt.statements, new Environment(environment));
+        return null;
+    }
+
+    private void executeBlock(List<Stmt> statements, Environment environment) {
+        Environment prev = this.environment;
+        try {
+            this.environment = environment;
+            for (Stmt stmt : statements) {
+                execute(stmt);
+            }
+        } finally {
+            this.environment = prev;
+        }
     }
 }
 
