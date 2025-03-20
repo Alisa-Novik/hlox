@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.example.Expr.Assign;
 import com.example.Expr.Binary;
+import com.example.Expr.Call;
 import com.example.Expr.Grouping;
 import com.example.Expr.Literal;
 import com.example.Expr.Logical;
@@ -67,6 +68,12 @@ class AstPrinter implements Expr.Visitor<String> {
     public String visitLogicalExpr(Logical expr) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'visitLogicalExpr'");
+    }
+
+    @Override
+    public String visitCallExpr(Call expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitCallExpr'");
     }
 }
 
