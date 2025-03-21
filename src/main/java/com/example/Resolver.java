@@ -14,6 +14,7 @@ import com.example.Expr.Logical;
 import com.example.Expr.Unary;
 import com.example.Expr.Variable;
 import com.example.Stmt.Block;
+import com.example.Stmt.Class;
 import com.example.Stmt.Expression;
 import com.example.Stmt.Function;
 import com.example.Stmt.If;
@@ -212,6 +213,13 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     public Void visitAssignExpr(Assign expr) {
         resolve(expr.value);
         resolveLocal(expr, expr.name);
+        return null;
+    }
+
+    @Override
+    public Void visitClassStmt(Class stmt) {
+        declare(stmt.name);
+        define(stmt.name);
         return null;
     }
 }

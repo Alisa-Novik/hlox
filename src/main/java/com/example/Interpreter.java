@@ -15,6 +15,7 @@ import com.example.Expr.Logical;
 import com.example.Expr.Unary;
 import com.example.Expr.Variable;
 import com.example.Stmt.Block;
+import com.example.Stmt.Class;
 import com.example.Stmt.Expression;
 import com.example.Stmt.Function;
 import com.example.Stmt.If;
@@ -312,6 +313,14 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     void resolve(Expr expr, int depth) {
         locals.put(expr, depth);
+    }
+
+    @Override
+    public Void visitClassStmt(Class stmt) {
+        environment.define(stmt.name.lexeme, null);
+        LoxClass kclass = new LoxClass(stmt.name.lexeme);
+        environment.assign(stmt.name, kclass);
+        return null;
     }
 }
 

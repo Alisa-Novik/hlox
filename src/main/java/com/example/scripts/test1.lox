@@ -1,5 +1,7 @@
-fun sayHi(first, last) {
-				print "Hi, " + first + " " + last + "!";
+class DevonshireCream {
+				serveOn() {
+								return "Scones";
+				}
 }
 
-sayHi("Dear", "Reader");
+print DevonshireCream;
