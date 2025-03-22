@@ -10,6 +10,7 @@ import com.example.Expr.Grouping;
 import com.example.Expr.Literal;
 import com.example.Expr.Logical;
 import com.example.Expr.Set;
+import com.example.Expr.Super;
 import com.example.Expr.This;
 import com.example.Expr.Unary;
 import com.example.Expr.Variable;
@@ -94,6 +95,12 @@ class AstPrinter implements Expr.Visitor<String> {
     public String visitThisExpr(This expr) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'visitThisExpr'");
+    }
+
+    @Override
+    public String visitSuperExpr(Super expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitSuperExpr'");
     }
 }
 

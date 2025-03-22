@@ -138,14 +138,14 @@ public class Parser {
     private Stmt whileStatement() {
         consume(TokenType.LEFT_PAREN, "Expect '(' after 'while'.");
         Expr condition = expression();
-        consume(TokenType.RIGHT_BRACE, "Expect ')' after 'while'.");
+        consume(TokenType.RIGHT_PAREN, "Expect ')' after 'while'.");
         return new While(condition, statement());
     }
 
     private Stmt ifStatement() {
         consume(TokenType.LEFT_PAREN, "Expect '(' after 'if'."); 
         Expr condition = expression();
-        consume(TokenType.RIGHT_BRACE, "Expect ')' after 'if'."); 
+        consume(TokenType.RIGHT_PAREN, "Expect ')' after 'if'."); 
 
         Stmt thenBranch = statement();
         Stmt elseBranch = null;
@@ -277,6 +277,12 @@ public class Parser {
         }
         if (match(TokenType.THIS)) {
             return new Expr.This(previous());
+        }
+        if (match(TokenType.SUPER)) {
+            Token keyword = previous();
+            consume(TokenType.DOT, "Expect '.' after 'super.'");
+            Token method = consume(TokenType.IDENTIFIER, "Expect superclass method name");
+            return new Expr.Super(keyword, method);
         }
 
         throw error(peek(), "Expect expression");

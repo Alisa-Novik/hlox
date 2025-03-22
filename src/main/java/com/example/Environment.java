@@ -49,7 +49,7 @@ public class Environment {
         return ancestor(distance).values.get(name);
     }
 
-    Environment ancestor(Integer distance) {
+    Environment ancestor(int distance) {
         Environment environment = this;
         for(int i = 0; i < distance; i++) {
             environment = environment.enclosing;

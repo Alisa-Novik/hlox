@@ -13,6 +13,7 @@ import com.example.Expr.Grouping;
 import com.example.Expr.Literal;
 import com.example.Expr.Logical;
 import com.example.Expr.Set;
+import com.example.Expr.Super;
 import com.example.Expr.This;
 import com.example.Expr.Unary;
 import com.example.Expr.Variable;
@@ -51,7 +52,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     }
 
     private void resolve(Expr expr) {
-
+        expr.accept(this);
     }
 
     private void resolve(Stmt stmt) {
@@ -216,6 +217,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         for (int i = scopes.size() - 1; i >= 0; i--) {
             if (scopes.get(i).containsKey(name.lexeme)) {
                 interpreter.resolve(expr, scopes.size() - 1 - i);
+                return;
             }
         }
     }
@@ -254,6 +256,11 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
             resolve(stmt.superclass);
         }
 
+        if (stmt.superclass != null) {
+            beginScope();
+            scopes.peek().put("super", true);
+        }
+
         beginScope();
         scopes.peek().put("this", true);
         for (Stmt.Function method : stmt.methods) {
@@ -264,6 +271,10 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
             resolveFunction(method, declaration);
         }
         endScope();
+
+        if (stmt.superclass != null) {
+            endScope();
+        }
 
         currentClass = enclosingClass;
         return null;
@@ -278,7 +289,13 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     @Override
     public Void visitSetExpr(Set expr) {
         resolve(expr.value);
-        resolve(expr.value);
+        resolve(expr.object);
+        return null;
+    }
+
+    @Override
+    public Void visitSuperExpr(Super expr) {
+        resolveLocal(expr, expr.keyword);
         return null;
     }
 }
