@@ -1,7 +1,9 @@
-class DevonshireCream {
-				serveOn() {
-								return "Scones";
+class Doughnut {
+				cook() {
+								print "Fry until golden brown.";
+								}
 				}
-}
 
-print DevonshireCream;
+class BostonCream < Doughnut {}
+
+BostonCream().cook();

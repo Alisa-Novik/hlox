@@ -5,12 +5,14 @@ import java.io.IOException;
 import com.example.Expr.Assign;
 import com.example.Expr.Binary;
 import com.example.Expr.Call;
+import com.example.Expr.Get;
 import com.example.Expr.Grouping;
 import com.example.Expr.Literal;
 import com.example.Expr.Logical;
+import com.example.Expr.Set;
+import com.example.Expr.This;
 import com.example.Expr.Unary;
 import com.example.Expr.Variable;
-import com.example.Token.TokenType;
 
 class AstPrinter implements Expr.Visitor<String> {
     String print(Expr expr) {
@@ -74,6 +76,24 @@ class AstPrinter implements Expr.Visitor<String> {
     public String visitCallExpr(Call expr) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'visitCallExpr'");
+    }
+
+    @Override
+    public String visitGetExpr(Get expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitGetExpr'");
+    }
+
+    @Override
+    public String visitSetExpr(Set expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitSetExpr'");
+    }
+
+    @Override
+    public String visitThisExpr(This expr) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitThisExpr'");
     }
 }
 

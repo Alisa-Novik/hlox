@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.example.Expr.Get;
 import com.example.Expr.Variable;
 import com.example.Stmt.Block;
 import com.example.Stmt.If;
@@ -32,9 +33,9 @@ public class Parser {
 
     private Stmt declaration() {
         try {
+            if (match(TokenType.CLASS)) return classDeclaration();
             if (match(TokenType.FUN)) return function("function");
             if (match(TokenType.VAR)) return varStatement();
-            if (match(TokenType.CLASS)) return classDeclaration();
             return statement();
         } catch (ParseError error) {
             synchronize();
@@ -44,12 +45,20 @@ public class Parser {
 
     private Stmt classDeclaration() {
         Token name = consume(TokenType.IDENTIFIER, "Expect class name.");
+        Expr.Variable superclass = null;
+        if (match(TokenType.LESS)) {
+            consume(TokenType.IDENTIFIER, "Extract superclass name.");
+            superclass = new Expr.Variable(previous());
+        }
+        consume(TokenType.LEFT_BRACE, "Expect '{' after class declaration");
         List<Stmt.Function> methods = new ArrayList<>();
+
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
             methods.add(function("method"));
         }
-        consume(TokenType.RIGHT_BRACE, "Expect '}' after function declaration");
-        return new Stmt.Class(name, methods);
+
+        consume(TokenType.RIGHT_BRACE, "Expect '}' after class declaration");
+        return new Stmt.Class(name, superclass, methods);
     }
 
     private Stmt.Function function(String kind) {
@@ -75,9 +84,19 @@ public class Parser {
         if (match(TokenType.IF)) return ifStatement();
         if (match(TokenType.PRINT)) return printStatement();
         if (match(TokenType.WHILE)) return whileStatement();
-        if (match(TokenType.RETURN)) return expressionStatement();
+        if (match(TokenType.RETURN)) return returnStatement();
         if (match(TokenType.LEFT_BRACE)) return new Block(block());
         return expressionStatement();
+    }
+
+    private Stmt returnStatement() {
+        Token keyword = previous();
+        Expr value = null;
+        if (!check(TokenType.SEMICOLON)) {
+            value = expression();
+        }
+        consume(TokenType.SEMICOLON, "Expect ';' after return value");
+        return new Stmt.Return(keyword, value);
     }
 
     private Stmt forStatement() {
@@ -160,14 +179,9 @@ public class Parser {
     }
 
     private Stmt expressionStatement() {
-        Token keyword = previous();
-        Expr value = null;
-        if (check(TokenType.SEMICOLON)) {
-            value = expression();
-        }
-
+        Expr expression = expression();
         consume(TokenType.SEMICOLON, "Expect ';' after return value.");
-        return new Stmt.Return(keyword, value);
+        return new Stmt.Expression(expression);
     }
 
     private Stmt printStatement() {
@@ -190,6 +204,9 @@ public class Parser {
             if (expr instanceof Variable) {
                 Token name = ((Variable) expr).name;
                 return new Expr.Assign(name, value);
+            } else if (expr instanceof Get) {
+                Expr.Get get = (Expr.Get)expr;
+                return new Expr.Set(get.object, get.name, value);
             }
             error(equals, "Invalid assignment target.");
         }
@@ -258,6 +275,9 @@ public class Parser {
         if (match(TokenType.IDENTIFIER)) {
             return new Expr.Variable(previous());
         }
+        if (match(TokenType.THIS)) {
+            return new Expr.This(previous());
+        }
 
         throw error(peek(), "Expect expression");
     }
@@ -303,6 +323,9 @@ public class Parser {
         while (true) {
             if (match(TokenType.LEFT_PAREN)) {
                 expr = finishCall(expr);
+            } else if (match(TokenType.DOT)) {
+                Token name = consume(TokenType.IDENTIFIER, "Expect property name after '.'.");
+                expr = new Expr.Get(expr, name);
             } else {
                 break;
             }

@@ -16,17 +16,20 @@ public class GenerateAst {
         defineAst(outputDir, "Expr", Arrays.asList(
             "Binary : Expr left, Token operator, Expr right",
             "Call: Expr callee, Token paren, List<Expr> arguments",
+            "Get: Expr object, Token name",
+            "Set: Expr object, Token name, Expr value",
             "Grouping : Expr expression",
             "Literal : Object value",
             "Logical : Expr left, Token operator, Expr right",
             "Unary : Token operator, Expr right",
+            "This: Token keyword",
             "Variable : Token name",
             "Assign : Token name, Expr value"
         ));
         defineAst(outputDir, "Stmt", Arrays.asList(
             "Block : List<Stmt> statements",
             "Expression : Expr expression",
-            "Class: Token name, List<Stmt.Function> functions",
+            "Class: Token name, Expr.Variable superclass, List<Stmt.Function> methods",
             "Function : Token name, List<Token> params, List<Stmt> body",
             "Print : Expr expression",
             "Return : Token keyword, Expr value",
