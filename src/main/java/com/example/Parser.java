@@ -238,11 +238,11 @@ public class Parser {
     }
 
     private Expr equality() {
-        Expr expr = comparision();
+        Expr expr = comparison();
 
         while(match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL)) {
             Token operator = previous();
-            Expr right = comparision();
+            Expr right = comparison();
             expr = new Expr.Binary(expr, operator, right);
         }
 
@@ -379,7 +379,7 @@ public class Parser {
         return expr;
     }
 
-    private Expr comparision() {
+    private Expr comparison() {
         Expr expr = term();
 
         while(match(TokenType.GREATER_EQUAL, TokenType.GREATER, TokenType.LESS_EQUAL, TokenType.LESS)) {
