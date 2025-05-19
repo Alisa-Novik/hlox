@@ -179,7 +179,7 @@ public class Parser {
 
     private Stmt expressionStatement() {
         Expr expression = expression();
-        consume(TokenType.SEMICOLON, "Expect ';' after return value.");
+        consume(TokenType.SEMICOLON, "Expect ';' after expression.");
         return new Stmt.Expression(expression);
     }
 
