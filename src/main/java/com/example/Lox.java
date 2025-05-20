@@ -14,6 +14,11 @@ public class Lox
 {
     private static Interpreter interpreter = new Interpreter();
 
+    /**
+     * Enables additional debugging output when set to {@code true}.
+     */
+    private static final boolean DEBUG = false;
+
     private static boolean hadError = false;
     private static boolean hadRuntimeError = false;
 
@@ -57,7 +62,9 @@ public class Lox
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
-        System.out.println(tokens);
+        if (DEBUG) {
+            System.out.println(tokens);
+        }
         Parser parser = new Parser(tokens);
         List<Stmt> statements = parser.parse();
 
