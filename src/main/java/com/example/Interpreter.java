@@ -125,7 +125,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return isEqual(left, right);
         }
          
-        // Unreacheable
+        // Unreachable
         return null;
     }
 
@@ -152,7 +152,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return -(double)right;
         }
 
-        // Unreacheable
+        // Unreachable
         return null;
     }
 
